@@ -9,9 +9,6 @@ import {
 } from "framer-motion";
 
 const variants = {
-  init: {
-    transition: { staggerChildren: 0 },
-  },
   show: {
     transition: {
       staggerChildren: 0.3,
@@ -22,7 +19,7 @@ const variants = {
 const squares = {
   init: {
     opacity: 0,
-    y: 10,
+    y: 100,
     filter: "blur(20px)",
     transition: { duration: 0 },
   },
@@ -37,7 +34,7 @@ const squares = {
 function Section(prop) {
   return (
     <div
-      className={`px-5 relative w-full h-[100lvh] min-h-[600px] flex justify-center items-center ${prop.className}`}
+      className={`overflow-hidden px-5 relative w-full h-[100lvh] min-h-[600px] flex justify-center items-center ${prop.className}`}
     >
       <h1 className="absolute w-[70%] text-center top-5 left-1/2 -translate-x-1/2 text-slate-700">
         {prop.name}
@@ -57,13 +54,26 @@ function Square(prop) {
     scrollYProgress,
     [0, 0.5],
     ["blur(50px)", "blur(0px)"],
-    easeOut
+    { ease: easeOut }
   );
-  const squareY = useTransform(scrollYProgress, [0, 0.5], [300, 0], easeOut);
+  const squareY = useTransform(scrollYProgress, [0, 0.5], [600, 0], {
+    ease: easeOut,
+  });
+  const squareScale = useTransform(scrollYProgress, [0, 0.5], [5, 1], {
+    ease: easeOut,
+  });
+  const squareOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 1], {
+    ease: easeOut,
+  });
   return (
     <motion.div
       ref={ref}
-      style={{ filter: squareBlur, y: squareY }}
+      style={{
+        filter: squareBlur,
+        y: squareY,
+        scale: squareScale,
+        opacity: squareOpacity,
+      }}
       className={`w-[100px] aspect-square rounded-lg ${prop.className}`}
     >
       {prop.children}
@@ -73,8 +83,8 @@ function Square(prop) {
 
 export default function Home() {
   const ref = useRef(null);
-  const isInView = useInView(ref, {});
-  const { scrollYProgress } = useScroll();
+  const isInView = useInView(ref);
+
   return (
     <>
       <Section name="網頁一旦讀取，就會自動跑的動畫" className="bg-slate-100">
@@ -89,26 +99,21 @@ export default function Home() {
       </Section>
       <Section name="捲動到該元件觸發的動畫">
         <motion.div
+          ref={ref}
           initial="init"
-          whileInView="show"
+          animate={isInView ? "show" : "init"}
           variants={variants}
           className="flex gap-4"
         >
           <motion.div
             variants={squares}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
             className="w-[20vw] max-w-[100px] aspect-square bg-red-400 rounded-lg"
           ></motion.div>
           <motion.div
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
             variants={squares}
             className="w-[20vw] max-w-[100px] aspect-square bg-green-400 rounded-lg"
           ></motion.div>
           <motion.div
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
             variants={squares}
             className="w-[20vw] max-w-[100px] aspect-square bg-blue-400 rounded-lg"
           ></motion.div>
@@ -122,7 +127,12 @@ export default function Home() {
         </div>
       </Section>
       <Section>
-        <div className="text-2xl text-center font-medium">
+        <motion.div
+          initial="init"
+          whileInView="show"
+          variants={squares}
+          className="text-2xl text-center font-medium"
+        >
           勞哥安安設計直播{" "}
           <a
             href="https://youtube.com/@maylogger"
@@ -130,7 +140,7 @@ export default function Home() {
           >
             youtube.com/@maylogger
           </a>
-        </div>
+        </motion.div>
       </Section>
     </>
   );
