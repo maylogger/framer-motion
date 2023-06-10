@@ -94,7 +94,7 @@ export default function Home() {
           className="text-[7.5vw] font-bold"
           initial={{ scale: 0, rotate: -360 }}
           animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: "spring", duration: 1, bounce: 0.25 }}
+          transition={{ type: "spring", stiffness: 50, damping: 10 }}
         >
           Hello World!!
         </motion.h1>
