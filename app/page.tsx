@@ -20,7 +20,7 @@ const squares = {
   init: {
     opacity: 0,
     y: 100,
-    filter: "blur(20px)",
+    filter: "blur(10px)",
     transition: { duration: 0 },
   },
   show: {
@@ -34,12 +34,14 @@ const squares = {
 function Section(prop) {
   return (
     <div
-      className={`overflow-hidden px-5 relative w-full h-[100lvh] min-h-[600px] flex justify-center items-center ${prop.className}`}
+      className={`px-5 relative w-full h-[100svh] min-h-[600px] ${prop.className}`}
     >
-      <h1 className="absolute w-[70%] text-center top-5 left-1/2 -translate-x-1/2 text-slate-700">
+      <h1 className="sticky mx-auto text-center top-0 p-5 text-slate-700 z-10">
         {prop.name}
       </h1>
-      {prop.children}
+      <div className="absolute inset-0 flex justify-center items-center">
+        {prop.children}
+      </div>
     </div>
   );
 }
@@ -59,7 +61,7 @@ function Square(prop) {
   const squareY = useTransform(scrollYProgress, [0, 0.5], [600, 0], {
     ease: easeOut,
   });
-  const squareScale = useTransform(scrollYProgress, [0, 0.5], [5, 1], {
+  const squareScale = useTransform(scrollYProgress, [0, 0.5], [3, 1], {
     ease: easeOut,
   });
   const squareOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 1], {
@@ -87,17 +89,17 @@ export default function Home() {
 
   return (
     <>
-      <Section name="網頁一旦讀取，就會自動跑的動畫" className="bg-slate-100">
+      <Section name="Auto animations" className="bg-slate-100">
         <motion.h1
           className="text-[7.5vw] font-bold"
           initial={{ scale: 0, rotate: -360 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: "spring", duration: 1, bounce: 0.25 }}
         >
-          Hello!! 大家好！蛤！666
+          Hello World!!
         </motion.h1>
       </Section>
-      <Section name="捲動到該元件觸發的動畫">
+      <Section name="Scroll-triggered animations">
         <motion.div
           ref={ref}
           initial="init"
@@ -119,7 +121,7 @@ export default function Home() {
           ></motion.div>
         </motion.div>
       </Section>
-      <Section className="bg-slate-100" name="配合捲動的動畫">
+      <Section className="bg-slate-100" name="Scroll animations">
         <div className="flex flex-col gap-4">
           <Square className="bg-slate-400" />
           <Square className="bg-slate-500" />
