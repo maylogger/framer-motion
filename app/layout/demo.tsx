@@ -362,11 +362,13 @@ const layoutAnimationDemo = () => {
                     opacity: { duration: 0.2, ease: "linear" },
                     layout: { type: "spring", stiffness: 700, damping: 35 },
                   }}
-                  style={{
-                    order: order[id],
-                  }}
+                  style={
+                    {
+                      // order: order[id],
+                    }
+                  }
                 >
-                  <Link href={item.href} className="block">
+                  <Link href={item.href} target="_blank" className="block">
                     <div className="aspect-square relative">
                       <Images
                         src={item.image}
